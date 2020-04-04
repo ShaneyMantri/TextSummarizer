@@ -13,6 +13,8 @@ router.register('programmer', views.ProgrammerView)
 urlpatterns = [
     path('', views.home, name="SummarizerHome"),
     path('router/', include(router.urls)),
+    path('text_summarize', views.textSummarizer, name="TextSummarizer"),
+    path('photo_summarizer', views.photoSummarizer, name="PhotoSummarizer")
 
 
 

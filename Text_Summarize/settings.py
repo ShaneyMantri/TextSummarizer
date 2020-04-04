@@ -126,7 +126,6 @@ STATIC_URL = '/static/'
 #CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
-
 STATIC_ROOT=os.path.join(BASE_DIR,"static_cdn")
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,"static")
@@ -136,6 +135,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-LOGIN_URL ='login'
+LOGIN_URL ='/login/'
 
-LOGIN_REDIRECT_URL = 'SummarizerHome'
+LOGIN_REDIRECT_URL = ''

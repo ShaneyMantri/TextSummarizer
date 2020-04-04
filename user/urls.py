@@ -4,9 +4,10 @@ from django.urls import path
 
 from summarizer_app import views as sappviews
 
-app_name = 'user'
-
 urlpatterns=[
-    path('register/',views.register,name='register'),
-    path('user_login/',views.user_login,name='user_login'),
+    path('register/',views.register, name='Register'),
+    path('login/',views.user_login, name='Login'),
+    path('users/', views.index, name='Index'),
+    path('special/', views.special, name='Special'),
+    path('logout/', views.user_logout, name='Logout'),
 ]

@@ -24,10 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("summarizer_app.urls")),
     path('', include("user.urls")),
-    url(r'users/',views.index,name='index'),
-    url(r'^special/',views.special,name='special'),
-    url(r'^logout/$', views.user_logout, name='logout'),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
 
 ]
 

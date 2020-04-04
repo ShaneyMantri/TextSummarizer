@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import UserProfileInfoForm, UserForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
@@ -21,7 +21,7 @@ def special(request):
 def user_logout(request):
     logout(request)
     # return HttpResponseRedirect(reverse("index"))
-    return render(request, 'summarizer_app/index.html', {})
+    return redirect('SummarizerHome')
 
 
 def register(request):
@@ -58,7 +58,7 @@ def user_login(request):
             if user.is_active:
                 login(request,user)
                 # return HttpResponseRedirect(reverse('index'))
-                return render(request, 'summarizer_app/index.html', {})
+                return redirect('SummarizerHome')
 
             else:
                 return HttpResponse("Your account was inactive.")
