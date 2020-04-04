@@ -3,18 +3,22 @@
    <section id="contact" class="contact section-bg">
       <div class="container">
 
-        <form class="md-form" action="#">
-          <div class="file-field">
-            <div class="btn btn-primary btn-sm float-left">
-              <span>Choose files</span>
-              <input type="file" multiple>
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text" placeholder="Upload one or more files">
-            </div>
-          </div>
+<!--        <form class="md-form" action="#">-->
+<!--          <div class="file-field">-->
+<!--            <div class="btn btn-primary btn-sm float-left">-->
+<!--              <span>Choose files</span>-->
+<!--              <input type="file" multiple>-->
+<!--            </div>-->
+<!--            <div class="file-path-wrapper">-->
+<!--              <input class="file-path validate" type="text" placeholder="Upload one or more files">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </form>-->
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="myfile">
+          <button type="submit">Upload</button>
         </form>
-
         <div class="section-title">
           <h2>Contact</h2>
           <p>Magnam dolores commodi suscipit eius consequatur ex aliquid fuga eum quidem</p>

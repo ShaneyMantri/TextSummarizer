@@ -3,7 +3,9 @@ from PIL import Image
 
 
 class image_received(models.Model):
-    image = models.ImageField(upload_to='texts_to_summarize')
+    username = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='photos_to_summarize')
+    dateTime = models.DateTimeField(auto_now_add=True)
 
 
 
