@@ -1,10 +1,15 @@
-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import languages, image_received, Programmer, Paradigm
 from .serializers import LanguageSerializer, ImageReceivedSerializer, ParadigmSerializer, ProgrammerSerializer
 from rest_framework import viewsets, permissions
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import ImageReceivedForm
+from django.http import HttpResponse
+from user.models import UserProfileInfo
+from py_scirpts import summarise
+
+
 
 @login_required
 def home(request):
@@ -22,10 +27,11 @@ def textSummarizer(request):
         
         
         """
-        print("HELLO")
-        print(username, email, text_to_summarize)
+        summary = summarise.driver_fun(text_to_summarize)
+        # print("HELLO")
+        # print(username, email, text_to_summarize)
         context ={
-                "Summarised":"Sample summarized text in hard code part 2"
+                "Summarised":summary
 
         }
         print(context)
@@ -36,7 +42,28 @@ def textSummarizer(request):
 
 @login_required
 def photoSummarizer(request):
-    return render(request, "summarizer_app/photosummarizer.html", {})
+
+    if request.method == 'POST':
+        form = ImageReceivedForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.username = UserProfileInfo.objects.filter(user=request.user).first()
+            form.save()
+            return redirect('success')
+        else:
+            messages.error(request, f'Invalid Form')
+            print("HLELLEL")
+            return redirect('PhotoSummarizer')
+    else:
+        form = ImageReceivedForm()
+    return render(request, "summarizer_app/photosummarizer.html", {'form': form})
+
+
+def success(request):
+    return HttpResponse('successfully uploaded')
+
+
 
 class LanguageView(viewsets.ModelViewSet):
     queryset = languages.objects.all()

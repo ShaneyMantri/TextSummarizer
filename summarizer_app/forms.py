@@ -4,7 +4,7 @@ from .models import image_received
 class ImageReceivedForm(forms.ModelForm):
     class Meta:
         model=image_received
-        fields = ('username','image','dateTime')
+        fields = ('username','image',)
 
 
 
