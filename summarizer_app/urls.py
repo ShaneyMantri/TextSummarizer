@@ -6,10 +6,10 @@ from django.contrib import admin
 from django.urls import path
 
 router = routers.DefaultRouter()
-router.register('languages', views.LanguageView)
+# router.register('languages', views.LanguageView)
 router.register('images', views.ImageView)
-router.register('paradigm', views.ParadigmView)
-router.register('programmer', views.ProgrammerView)
+# router.register('paradigm', views.ParadigmView)
+# router.register('programmer', views.ProgrammerView)
 
 
 urlpatterns = [
@@ -17,8 +17,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('text_summarize', views.textSummarizer, name="TextSummarizer"),
     path('photo_summarizer', views.photoSummarizer, name="PhotoSummarizer"),
-    path('success', views.success, name='success')
-
-
 
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import languages, image_received, Programmer, Paradigm
-from .serializers import LanguageSerializer, ImageReceivedSerializer, ParadigmSerializer, ProgrammerSerializer
+from .models import image_received
+from .serializers import ImageReceivedSerializer
 from rest_framework import viewsets, permissions
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -25,11 +25,8 @@ def textSummarizer(request):
         
         ADD SUMMARIZER CODE HERE
         
-        
         """
         summary = summarise.driver_fun(text_to_summarize)
-        # print("HELLO")
-        # print(username, email, text_to_summarize)
         context ={
                 "Summarised":summary
 
@@ -50,7 +47,9 @@ def photoSummarizer(request):
             image = form.save(commit=False)
             image.username = UserProfileInfo.objects.filter(user=request.user).first()
             form.save()
-            return redirect('success')
+            messages.error(request, f'Image Posted Successfully')
+            return redirect("PhotoSummarizer")
+
         else:
             messages.error(request, f'Invalid Form')
             print("HLELLEL")
@@ -60,27 +59,11 @@ def photoSummarizer(request):
     return render(request, "summarizer_app/photosummarizer.html", {'form': form})
 
 
-def success(request):
-    return HttpResponse('successfully uploaded')
 
-
-
-class LanguageView(viewsets.ModelViewSet):
-    queryset = languages.objects.all()
-    serializer_class = LanguageSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class ImageView(viewsets.ModelViewSet):
     queryset = image_received.objects.all()
     serializer_class = ImageReceivedSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-
-class ParadigmView(viewsets.ModelViewSet):
-    queryset = Paradigm.objects.all()
-    serializer_class = ParadigmSerializer
-
-class ProgrammerView(viewsets.ModelViewSet):
-    queryset = Programmer.objects.all()
-    serializer_class = ProgrammerSerializer
