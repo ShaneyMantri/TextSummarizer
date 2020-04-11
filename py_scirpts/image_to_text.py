@@ -4,11 +4,10 @@ import numpy as np
 import pytesseract
 from pytesseract import Output
 import matplotlib.pyplot as plt 
-
+from . import summarise
 print("Ready.")
 
-IMG_DIR= 'images/'
-
+IMG_DIR= 'media/photos_to_summarize/'
 ####
 #### PREPROCESSING FUNCTIONS
 ####
@@ -87,29 +86,39 @@ def plot_img(imread_obj):
     plt.title("orignal image")
     plt.show()
 
-image = cv2.imread(IMG_DIR + 'sum1.jpg')
-plot_img(image)
-
-# Preprocess image
 
 
-gray= get_grayscale(image)
-thresh= thresholding(gray)
-plt.imshow(thresh)
-plt.show()
+def read_image(image_name):
+    print(IMG_DIR + str(image_name))
+    image = cv2.imread(IMG_DIR + str(image_name))
+    # plot_img(image)
 
-opening = opening(gray)
-plt.imshow(opening)
-plt.show()
+    # Preprocess image
 
-canny = canny(gray)
-plt.imshow(canny)
-plt.show()
 
-print('output from orignal: ')
-print(pytesseract.image_to_string(thresh))
-text= pytesseract.image_to_string(thresh)
+    gray= get_grayscale(image)
+    thresh= thresholding(gray)
+    # plt.imshow(thresh)
+    # plt.show()
 
-txtfile= open("RES.txt", 'w')
-n= txtfile.write(text)
-txtfile.close()
+    opening1 = opening(gray)
+    # plt.imshow(opening1)
+    # plt.show()
+
+    canny1 = canny(gray)
+    # plt.imshow(canny1)
+    # plt.show()
+    #
+    print('output from orignal: ')
+    # pytesseract.pytesseract.tesseract_cmd = '‪C:/Program Files/Tesseract-OCR/tesseract.exe'
+    print(pytesseract.image_to_string(thresh))
+    text= pytesseract.image_to_string(thresh)
+    # print(text)
+    #
+    Cleaned_text = text.replace('\r', ' ').replace('\n', ' ').replace(" |", "")
+    print("Cleaned Text",Cleaned_text)
+    summarised_text = summarise.driver_fun(Cleaned_text)
+    return summarised_text
+    # txtfile= open("RES.txt", 'w')
+    # n= txtfile.write(text)
+    # txtfile.close()

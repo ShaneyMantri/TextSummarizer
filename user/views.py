@@ -1,8 +1,6 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.contrib import messages
 from django.shortcuts import render, redirect
-from .forms import UserProfileInfoForm, UserForm
+from .forms import UserForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -24,30 +22,23 @@ def user_logout(request):
     return redirect('SummarizerHome')
 
 
+
 def register(request):
-    registered = False
+    form = UserForm()
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileInfoForm(data=request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            if 'profile_pic' in request.FILES:
-                profile.profile_pic = request.FILES['profile_pic']
-            profile.save()
-            registered = True
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Your Account has been created! You are now able to log in.')
+            return redirect('Login')
         else:
-            print(user_form.errors, profile_form.errors)
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileInfoForm()
-    return render(request, 'user/registration.html',
-                  {'user_form': user_form,
-                   'profile_form': profile_form,
-                   'registered': registered})
+            form = UserForm()
+            messages.error(request,f'Invalid Username or password')
+    return render(request, 'user/registration.html', {'form': form})
+
+
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -63,8 +54,10 @@ def user_login(request):
             else:
                 return HttpResponse("Your account was inactive.")
         else:
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(username,password))
+            messages.error(request, f'Someone tried to login and failed.')
+            messages.error(request, "They used username: {} and password: {}".format(username,password))
             return HttpResponse("Invalid login details given")
     else:
         return render(request, 'user/login.html', {})
+
+

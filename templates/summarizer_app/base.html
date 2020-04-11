@@ -30,6 +30,15 @@
 </head>
 
 <body>
+      <div class="col-md-8">
+          {% if messages %}
+              {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}">
+                      {{ message }}
+                  </div>
+              {% endfor %}
+          {%endif%}
+      </div>
 
   <!-- ======= Hero Section ======= -->
   <section id="hero">
@@ -70,15 +79,6 @@
           {% endif %}
         </ul>
       </nav><!-- .nav-menu -->
-      <div class="col-md-8">
-          {% if messages %}
-              {% for message in messages %}
-                  <div class="alert alert-{{ message.tags }}">
-                      {{ message }}
-                  </div>
-              {% endfor %}
-          {%endif%}
-      </div>
     </div>
   </header><!-- End Header -->
 

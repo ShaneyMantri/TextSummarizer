@@ -1,11 +1,11 @@
 from django.db import models
 from PIL import Image
-from user.models import UserProfileInfo
 
 
 class image_received(models.Model):
-    username = models.ForeignKey(UserProfileInfo, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='photos_to_summarize')
+    username = models.CharField(max_length=100, default="")
+    # image = models.FileField(upload_to='photos_to_summarize', null=True, blank=True)
+    image = models.FileField(upload_to='photos_to_summarize', null=True, blank=True)
     dateTime = models.DateTimeField(auto_now_add=True)
 
 

@@ -59,7 +59,7 @@ def generate_summary(sentences, sent_value, threshold):
     return summary
 
 def driver_fun(text_to_summarize):
-    print("hello")
+    # print("hello")
     # with open('RES.txt', 'r') as file:
     #     text_str= file.read().replace('\n', '')
 
