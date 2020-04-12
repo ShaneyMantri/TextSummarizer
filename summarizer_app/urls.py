@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('text_summarize', views.textSummarizer, name="TextSummarizer"),
     path('photo_summarizer', views.photoSummarizer, name="PhotoSummarizer"),
+    path('register_user', views.register_user)
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 ]

@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
 
 from py_scirpts import summarise, image_to_text
 from .forms import ImageReceivedForm
@@ -57,6 +61,21 @@ def photoSummarizer(request):
     else:
         form = ImageReceivedForm()
     return render(request, "summarizer_app/photosummarizer.html", {'form': form})
+
+
+@api_view(['POST'])
+def register_user(request):
+    serialiser = UserSerializer(data=request.data)
+    if serialiser.is_valid():
+        serialiser.save()
+        # print("Created")
+        # print(serialiser.data)
+        return Response(serialiser.data, status=status.HTTP_201_CREATED)
+
+    # print("Wrong Data")
+    # print(serialiser.data)
+    # print(status.HTTP_400_BAD_REQUEST)
+    return Response(serialiser.data, status = status.HTTP_400_BAD_REQUEST)
 
 
 
