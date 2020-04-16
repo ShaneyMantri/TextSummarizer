@@ -9,7 +9,7 @@ from rest_framework import status
 
 
 from py_scirpts import summarise
-from py_scirpts import image_to_text
+# from py_scirpts import image_to_text
 from .forms import ImageReceivedForm
 from .models import image_received
 from .serializers import ImageReceivedSerializer, UserSerializer
