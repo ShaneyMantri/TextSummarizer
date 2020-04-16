@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from py_scirpts import summarise, image_to_text
+from py_scirpts import summarise
+from py_scirpts import image_to_text
 from .forms import ImageReceivedForm
 from .models import image_received
 from .serializers import ImageReceivedSerializer, UserSerializer
@@ -47,7 +48,8 @@ def photoSummarizer(request):
             image.username = User.objects.filter(username=request.user).first()
             form.save()
             image_saved = form.cleaned_data['image']
-            summarised_text = image_to_text.read_image(image_saved)
+            summarised_text = "Sample summarised text"
+            # summarised_text = image_to_text.read_image(image_saved)
             print("Summarised Text", summarised_text)
             messages.error(request, f'Image Posted Successfully')
             context ={
