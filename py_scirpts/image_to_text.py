@@ -5,7 +5,6 @@ import pytesseract
 from pytesseract import Output
 import matplotlib.pyplot as plt 
 from . import summarise
-print("Ready.")
 
 IMG_DIR= 'media/photos_to_summarize/'
 ####
