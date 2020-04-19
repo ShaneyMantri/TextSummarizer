@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -12,7 +13,7 @@ from py_scirpts import summarise
 from py_scirpts import image_to_text
 from .forms import ImageReceivedForm
 from .models import image_received
-from .serializers import ImageReceivedSerializer, UserSerializer
+from .serializers import ImageReceivedSerializer, UserSerializer, UserLoginSerializer
 
 
 @login_required
@@ -81,6 +82,59 @@ def register_user(request):
 
 
 
+@api_view(['POST'])
+def verify_login(request):
+
+    """ CAN USE SERIAIZER FOR INITIAL_DATA"""
+    # requested_user = serializer.initial_data
+    # serializer = UserLoginSerializer(data=request.data)
+
+
+
+    """ CAN ALSO USER REQUEST.DATA FOR DATA"""
+    requested_user = request.data
+    requested_user_dict = dict(requested_user)
+    current_user = authenticate(username=requested_user_dict['username'], password=requested_user_dict['password'])
+    user_pk = User.objects.get(username=requested_user_dict['username'])
+    # print(requested_user_dict['password'])
+    # print(str(current_user.password))
+    if current_user:
+        if current_user.is_active:
+
+            return Response(requested_user, status.HTTP_200_OK)
+        else:
+            return Response(requested_user, status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(requested_user, status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['POST'])
+def image_upload_api(request):
+    image_serializer = ImageReceivedSerializer(data=request.data)
+    if image_serializer.is_valid():
+        image_serializer.save()
+        print("Image has been uploaded")
+        return Response(image_serializer.data, status.HTTP_201_CREATED)
+
+    print("Image not uploaded")
+    return Response(image_serializer.data, status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def text_upload_api(request):
+    data = dict(request.data)
+    """
+    dict = {
+        "username":
+        "text":
+        "date-time":
+    }
+    """
+
+
+    summarised_text = summarise.driver_fun(data['text'])
+    return Response({"summarised_text":summarised_text}, status.HTTP_200_OK)
 
 
 class ImageView(viewsets.ModelViewSet):

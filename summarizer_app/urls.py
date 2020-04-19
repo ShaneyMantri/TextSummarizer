@@ -15,7 +15,14 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('text_summarize', views.textSummarizer, name="TextSummarizer"),
     path('photo_summarizer', views.photoSummarizer, name="PhotoSummarizer"),
-    path('register_user', views.register_user)
+    path('register_user', views.register_user, name="APIRegister"),
+    path('login_api', views.verify_login, name="APILogin"),
+    path('image_upload_api', views.image_upload_api, name="ImageUploadAPI"),
+    path('text_upload_api', views.text_upload_api, name="TextUploadAPI"),
+
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 ]
+
+
+
