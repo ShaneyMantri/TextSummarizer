@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import  image_received
+from .models import  image_received, text_received
 from django.contrib.auth.models import User
 
 
@@ -8,6 +8,15 @@ class ImageReceivedSerializer(serializers.ModelSerializer):
     class Meta:
         model = image_received
         fields = "__all__"
+
+
+
+
+class TextReceivedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=text_received
+        fields="__all__"
 
 
 
@@ -32,3 +41,5 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields = ('username','password')
+
+

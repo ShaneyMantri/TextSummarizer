@@ -10,10 +10,10 @@ from rest_framework import status
 
 
 from py_scirpts import summarise
-from py_scirpts import image_to_text
-from .forms import ImageReceivedForm
+# from py_scirpts import image_to_text
+from .forms import ImageReceivedForm, TextReceivedForm
 from .models import image_received
-from .serializers import ImageReceivedSerializer, UserSerializer, UserLoginSerializer
+from .serializers import ImageReceivedSerializer, UserSerializer, UserLoginSerializer, TextReceivedSerializer
 
 
 @login_required
@@ -23,17 +23,30 @@ def home(request):
 @login_required
 def textSummarizer(request):
     if request.method == "POST":
-        username = request.POST.get("Username")
-        email = request.POST.get("Email")
-        text_to_summarize = request.POST.get("TextToSummarize")
-        summary = summarise.driver_fun(text_to_summarize)
-        context ={
-                "Summarised":summary
+        # text_to_summarize = request.POST.get("TextToSummarize")
+        form = TextReceivedForm(data=request.POST)
+        if form.is_valid():
 
-        }
-        print(context)
-        return render(request, "summarizer_app/textsummarizer.html", {"context":context})
-    return render(request, "summarizer_app/textsummarizer.html", {})
+            text = form.save(commit=False)
+            text.username = User.objects.filter(username=request.user).first()
+            text.save()
+            text_to_summarize = form.cleaned_data['text']
+            summary = summarise.driver_fun(text_to_summarize)
+            form1 = TextReceivedForm()
+            context ={
+                    "Summarised":summary,
+                    "form": form1
+
+            }
+
+            messages.success(request, "Text summarized successfully")
+            return render(request, "summarizer_app/textsummarizer.html",context)
+
+        else:
+            messages.error(request, "Invalid form submitted")
+    else:
+        form = TextReceivedForm()
+    return render(request, "summarizer_app/textsummarizer.html", {"form":form})
 
 
 
@@ -48,11 +61,13 @@ def photoSummarizer(request):
             image = form.save(commit=False)
             image.username = User.objects.filter(username=request.user).first()
             form.save()
+
+
             image_saved = form.cleaned_data['image']
-            # summarised_text = "Sample summarised text"
-            summarised_text = image_to_text.read_image(image_saved)
+            # summarised_text = image_to_text.read_image(image_saved)
+            summarised_text = "Sample summarised text"
             print("Summarised Text", summarised_text)
-            messages.error(request, f'Image Posted Successfully')
+            messages.success(request, f'Image Posted Successfully')
             context ={
                 'summarised_text':summarised_text
             }
@@ -68,17 +83,14 @@ def photoSummarizer(request):
 
 @api_view(['POST'])
 def register_user(request):
-    serialiser = UserSerializer(data=request.data)
-    if serialiser.is_valid():
-        serialiser.save()
-        # print("Created")
-        # print(serialiser.data)
-        return Response(serialiser.data, status=status.HTTP_201_CREATED)
+    register_user_serialiser = UserSerializer(data=request.data)
 
-    # print("Wrong Data")
-    # print(serialiser.data)
-    # print(status.HTTP_400_BAD_REQUEST)
-    return Response(serialiser.data, status = status.HTTP_400_BAD_REQUEST)
+    if register_user_serialiser.is_valid():
+        register_user_serialiser.save()
+        return Response(register_user_serialiser.data, status=status.HTTP_201_CREATED)
+
+
+    return Response(register_user_serialiser.data, status = status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -123,7 +135,17 @@ def image_upload_api(request):
 
 @api_view(['POST'])
 def text_upload_api(request):
-    data = dict(request.data)
+    # data = dict(request.data)
+
+    text_serializer = TextReceivedSerializer(data=request.data)
+    print("Check1")
+    if text_serializer.is_valid():
+        text_serializer.save()
+        text = text_serializer.data
+        summarised_text = summarise.driver_fun(text['text'])
+        print("Check2")
+        return Response({"summarised_text":summarised_text}, status.HTTP_200_OK)
+
     """
     dict = {
         "username":
@@ -132,9 +154,8 @@ def text_upload_api(request):
     }
     """
 
-
-    summarised_text = summarise.driver_fun(data['text'])
-    return Response({"summarised_text":summarised_text}, status.HTTP_200_OK)
+    print("Check3")
+    return Response(text_serializer.data, status.HTTP_400_BAD_REQUEST)
 
 
 class ImageView(viewsets.ModelViewSet):

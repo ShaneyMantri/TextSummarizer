@@ -3,34 +3,22 @@
 {% block content %}
 <section id="contact" class="contact section-bg">
       <div class="container">
-
         <div class="section-title">
           <h2>Type the text in the text-box</h2>
-                <div>
+            <div>
 
-            <form method="POST">
-              {% csrf_token %}
-            <div class="form-group">
-           <label for="Username">Username</label>
-            <input  class="form-control" id="Username" placeholder="Enter username" name="Username">
-           <label for="Email">Email address</label>
-            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email">
-          </div>
-          <label for="TextToSummarize">Text to summarise</label>
-          <textarea class="form-control" id="TextToSummarize" rows="3" name="TextToSummarize" placeholder="Text">Sample text to be Summarized</textarea>
-
-              <button style="margin:15px" class="btn btn-primary" type="submit">Summarise</button>
-      </form>
-
-          </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <label for="TextToSummarize">Text to summarise</label>
+                    {{ form.as_p }}
+                    <button style="margin:15px" class="btn btn-primary" type="submit">Summarise</button>
+                </form>
+            </div>
         </div>
 
-        {% for x,y in context.items %}
           <label for="SummarizedText">Summarized Text</label>
-
-          <textarea readonly class="form-control" id="SummarizedText" rows="3" name="SummarizedText" placeholder="Text">{{ y }}</textarea>
-
-        {% endfor %}
+          <textarea readonly class="form-control" id="SummarizedText" rows="3" name="SummarizedText" placeholder="Text">{{ Summarised }}</textarea>
+          <h2>Summarization Done</h2>
 
 
       </div>
