@@ -10,7 +10,7 @@ from rest_framework import status
 
 
 from py_scirpts import summarise
-# from py_scirpts import image_to_text
+from py_scirpts import image_to_text
 from .forms import ImageReceivedForm, TextReceivedForm
 from .models import image_received
 from .serializers import ImageReceivedSerializer, UserSerializer, UserLoginSerializer, TextReceivedSerializer
@@ -64,8 +64,8 @@ def photoSummarizer(request):
 
 
             image_saved = form.cleaned_data['image']
-            # summarised_text = image_to_text.read_image(image_saved)
-            summarised_text = "Sample summarised text"
+            summarised_text = image_to_text.read_image(image_saved)
+            # summarised_text = "Sample summarised text"
             print("Summarised Text", summarised_text)
             messages.success(request, f'Image Posted Successfully')
             context ={
@@ -144,7 +144,7 @@ def text_upload_api(request):
         text = text_serializer.data
         summarised_text = summarise.driver_fun(text['text'])
         print("Check2")
-        return Response({"summarised_text":summarised_text}, status.HTTP_200_OK)
+        return Response(summarised_text, status.HTTP_200_OK)
 
     """
     dict = {
