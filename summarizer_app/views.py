@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -97,7 +98,8 @@ def register_user(request):
 @api_view(['POST'])
 def verify_login(request):
 
-    """ CAN USE SERIAIZER FOR INITIAL_DATA"""
+    """ CAN USE SERIALIZER FOR INITIAL_DATA"""
+
     # requested_user = serializer.initial_data
     # serializer = UserLoginSerializer(data=request.data)
 
@@ -138,12 +140,10 @@ def text_upload_api(request):
     # data = dict(request.data)
 
     text_serializer = TextReceivedSerializer(data=request.data)
-    print("Check1")
     if text_serializer.is_valid():
         text_serializer.save()
         text = text_serializer.data
         summarised_text = summarise.driver_fun(text['text'])
-        print("Check2")
         return Response(summarised_text, status.HTTP_200_OK)
 
     """
@@ -154,8 +154,28 @@ def text_upload_api(request):
     }
     """
 
-    print("Check3")
     return Response(text_serializer.data, status.HTTP_400_BAD_REQUEST)
+
+
+
+
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])
+def image_upload_api(request):
+    serializer = ImageReceivedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        image = serializer.data['image']
+
+
+
+
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    print(serializer.data)
+    return Response(serializer.data, status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class ImageView(viewsets.ModelViewSet):

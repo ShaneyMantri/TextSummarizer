@@ -19,6 +19,7 @@ urlpatterns = [
     path('login_api', views.verify_login, name="APILogin"),     #API for login
     path('image_upload_api', views.image_upload_api, name="ImageUploadAPI"),    #API for image upload(not working)
     path('text_upload_api', views.text_upload_api, name="TextUploadAPI"),       #API for text upload
+    path('image_upload_api', views.image_upload_api, name='ImageUploadAPI')
 
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
