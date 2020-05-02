@@ -123,16 +123,36 @@ def verify_login(request):
 
 
 
-@api_view(['POST'])
-def image_upload_api(request):
-    image_serializer = ImageReceivedSerializer(data=request.data)
-    if image_serializer.is_valid():
-        image_serializer.save()
-        print("Image has been uploaded")
-        return Response(image_serializer.data, status.HTTP_201_CREATED)
+# @api_view(['POST'])
+# def image_upload_api(request):
+#     image_serializer = ImageReceivedSerializer(data=request.data)
+#     if image_serializer.is_valid():
+#         image_serializer.save()
+#         print("Image has been uploaded")
+#         return Response(image_serializer.data, status.HTTP_201_CREATED)
+#
+#     print("Image not uploaded")
+#     return Response(image_serializer.data, status.HTTP_400_BAD_REQUEST)
 
-    print("Image not uploaded")
-    return Response(image_serializer.data, status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])
+def image_upload_api(request):
+    serializer = ImageReceivedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        image = serializer.data['image']
+        # print(image)
+        summarised_text = image_to_text.read_image(str(image))
+        print(summarised_text)
+        return Response({"summarised_text":summarised_text}, status.HTTP_200_OK)
+
+    print(serializer.data)
+    return Response(serializer.data, status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -156,24 +176,6 @@ def text_upload_api(request):
 
     return Response(text_serializer.data, status.HTTP_400_BAD_REQUEST)
 
-
-
-
-@api_view(['POST'])
-@parser_classes([MultiPartParser, FormParser])
-def image_upload_api(request):
-    serializer = ImageReceivedSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        image = serializer.data['image']
-
-
-
-
-        return Response(serializer.data, status.HTTP_200_OK)
-
-    print(serializer.data)
-    return Response(serializer.data, status.HTTP_400_BAD_REQUEST)
 
 
 

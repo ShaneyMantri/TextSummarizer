@@ -17,7 +17,7 @@ urlpatterns = [
     path('photo_summarizer', views.photoSummarizer, name="PhotoSummarizer"),
     path('register_user', views.register_user, name="APIRegister"),  #API for register
     path('login_api', views.verify_login, name="APILogin"),     #API for login
-    path('image_upload_api', views.image_upload_api, name="ImageUploadAPI"),    #API for image upload(not working)
+    # path('image_upload_api', views.image_upload_api, name="ImageUploadAPI"),    #API for image upload(not working)
     path('text_upload_api', views.text_upload_api, name="TextUploadAPI"),       #API for text upload
     path('image_upload_api', views.image_upload_api, name='ImageUploadAPI')
 

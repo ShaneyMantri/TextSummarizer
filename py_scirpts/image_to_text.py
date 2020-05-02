@@ -6,7 +6,7 @@ from pytesseract import Output
 import matplotlib.pyplot as plt 
 from . import summarise
 
-IMG_DIR= 'media/photos_to_summarize/'
+IMG_DIR= 'F:/Git/TextSummarizer'
 ####
 #### PREPROCESSING FUNCTIONS
 ####
@@ -88,8 +88,8 @@ def plot_img(imread_obj):
 
 
 def read_image(image_name):
-    print(IMG_DIR + str(image_name))
     image = cv2.imread(IMG_DIR + str(image_name))
+
     # plot_img(image)
 
     # Preprocess image
@@ -108,16 +108,24 @@ def read_image(image_name):
     # plt.imshow(canny1)
     # plt.show()
     #
-    print('output from orignal: ')
+    # print('output from orignal: ')
     # pytesseract.pytesseract.tesseract_cmd = '‪C:/Program Files/Tesseract-OCR/tesseract.exe'
-    print(pytesseract.image_to_string(thresh))
+    # print(pytesseract.image_to_string(thresh))
+
+
     text= pytesseract.image_to_string(thresh)
+
     # print(text)
     #
+
     Cleaned_text = text.replace('\r', ' ').replace('\n', ' ').replace(" |", "")
-    print("Cleaned Text",Cleaned_text)
+
+    # print("Cleaned Text",Cleaned_text)
+
     summarised_text = summarise.driver_fun(Cleaned_text)
     return summarised_text
+
+
     # txtfile= open("RES.txt", 'w')
     # n= txtfile.write(text)
     # txtfile.close()
