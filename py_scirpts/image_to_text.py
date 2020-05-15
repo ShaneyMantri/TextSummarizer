@@ -109,8 +109,8 @@ def read_image(image_name):
     # plt.show()
     #
     # print('output from orignal: ')
-    # pytesseract.pytesseract.tesseract_cmd = '‪C:/Program Files/Tesseract-OCR/tesseract.exe'
     # print(pytesseract.image_to_string(thresh))
+    pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 
     text= pytesseract.image_to_string(thresh)

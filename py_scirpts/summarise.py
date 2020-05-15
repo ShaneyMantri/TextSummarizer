@@ -71,6 +71,8 @@ def driver_fun(text_to_summarize):
     average_score= find_threshold(scores)
     summary= generate_summary(sentences, scores, (1.5* average_score))
 
-    return summary
+    # return summary
+    print(summary)
 
-# driver_fun(text_to_summarize)
+text_to_summarize = "Even the name given to the reefs is something of a misnomer. The Scleractinia themselves generally comprise no more than 10 percent of the biota of the average reef community: zooxanthellae can account for up to 90 percent of the reef mass, along with foraminifera, annelid worms, and assorted mollusks. Moreover, reefs can flourish only in shallow, highly saline waters above 70°F., because the algae require such circumstances; yet non-reef-building corals occur worldwide under various environmental conditions, from the Arctic to the Mediterranean, home of the red coral prized for jewelry. The most likely reason that the term coral reefs persists is that the brilliant variety of coral shapes and colors makes aesthetic considerations more vivid than biological ones."
+driver_fun(text_to_summarize)
